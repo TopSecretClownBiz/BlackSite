@@ -22,32 +22,34 @@
       display: none;
       justify-content: center;
       align-items: center;
-      font-size: 1.1em;
       padding: 2vw;
     }
 
-    #stage1 { background-color: black; display: flex; }
-    #stage2 {
+    #stage1 {
       background-color: black;
-      color: #00FF00;
-      font-size: 1.2em;
-      display: none;
-      flex-wrap: wrap;
+      display: flex;
+    }
+
+    #stage2, #stage3 {
+      font-size: 2.2em; /* bigger glitch display */
       font-family: monospace;
       white-space: pre-wrap;
+      background-color: black;
+      color: #00FF00;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 3vh 3vw;
     }
 
     #stage3 {
-      background-color: black;
-      color: #00FF00;
-      font-size: 1.2em;
-      display: none;
-      animation: flicker 0.3s infinite alternate;
+      animation: verticalSquiggle 0.3s infinite alternate;
+      transform-origin: center;
     }
 
-    @keyframes flicker {
-      0% { opacity: 0.9; transform: skewX(-1deg); }
-      100% { opacity: 1; transform: skewX(1deg); }
+    @keyframes verticalSquiggle {
+      0% { transform: scaleY(1) skewY(-1deg); opacity: 0.9; }
+      100% { transform: scaleY(1.1) skewY(1deg); opacity: 1; }
     }
 
     .boot-background {
@@ -82,24 +84,23 @@
     .blinking-cursor {
       display: inline-block;
       width: 10px;
-      background-color: #00ff00;
+      height: 1em;
+      background-color: #00FF00;
       animation: blink 1s step-start infinite;
       margin-left: 3px;
       vertical-align: bottom;
     }
 
     @keyframes blink {
-      0%, 50% { background-color: #00ff00; }
+      0%, 50% { background-color: #00FF00; }
       51%, 100% { background-color: transparent; }
     }
   </style>
 </head>
 <body>
-  <!-- Stage 1: blank -->
-  <div class="stage" id="stage1"></div>
+  <div id="stage1" class="stage"></div>
 
-  <!-- Stage 2: Grid junk -->
-  <div class="stage" id="stage2">
+  <div id="stage2" class="stage">
     <pre>
 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
@@ -107,46 +108,40 @@
     </pre>
   </div>
 
-  <!-- Stage 3: flickering -->
-  <div class="stage" id="stage3">
+  <div id="stage3" class="stage">
     <pre>
 █▓▒░░▒▓██▒▓▒░▒▓▓▒░░▒▓▒▓▓▓░▒░▒▒▓▒▒░▒▓░▓▒▓░░
 ▒▓▓▒▒▒░▒▓░▓▓▒▓▓░▒▒▒▒░▒▓▓▒▓▒▓▒░░▓▒▒░▓▒░▒▒▒░
     </pre>
   </div>
 
-  <!-- Boot image & typing -->
-  <div class="boot-background" id="bootBG"></div>
-  <div class="boot-overlay" id="bootOverlay">
+  <div id="bootBG" class="boot-background"></div>
+  <div id="bootOverlay" class="boot-overlay">
     <p id="line1"></p>
     <p id="line2"></p>
     <p id="line3"></p>
+    <span id="cursor" class="blinking-cursor"></span>
   </div>
 
-  <!-- Beep + Modem -->
   <audio id="beep" src="assets/audio/beep-02.mp3"></audio>
-  <audio autoplay>
-    <source src="assets/audio/dial-up-modem-02.mp3" type="audio/mpeg" />
-  </audio>
+  <audio id="modem" src="assets/audio/dial-up-modem-02.mp3"></audio>
 
   <script>
-    const stages = ["stage1", "stage2", "stage3"];
+    const stages = ["stage1","stage2","stage3"];
     let current = 0;
 
     function showNextStage() {
+      document.getElementById(stages[current]).style.display = "none";
+      current++;
       if (current < stages.length) {
-        document.getElementById(stages[current]).style.display = "none";
-        current++;
-        if (current < stages.length) {
-          document.getElementById(stages[current]).style.display = "flex";
-          setTimeout(showNextStage, 300);
-        } else {
-          // All pre-boot stages done, play beep + show boot
-          document.getElementById("beep").play();
-          document.getElementById("bootBG").style.display = "block";
-          document.getElementById("bootOverlay").style.display = "block";
-          startTyping();
-        }
+        const el = document.getElementById(stages[current]);
+        el.style.display = "flex";
+        setTimeout(showNextStage, 300);
+      } else {
+        document.getElementById("beep").play();
+        document.getElementById("bootBG").style.display = "block";
+        document.getElementById("bootOverlay").style.display = "block";
+        startTyping();
       }
     }
 
@@ -155,52 +150,48 @@
       "LOADING MODULE: CLOWN.NET / LAFF.DLL / FUN.EXE",
       "HONKING THE HORNS..."
     ];
+    const delayLines = 1000;
+    const charSpeed = 50;
+    const cursor = document.getElementById("cursor");
 
-    const delayBetweenLines = 1000;
-    const typingSpeed = 50;
-
-    function typeLine(line, elementId, callback) {
+    function typeLine(line, id, callback) {
       let i = 0;
-      const el = document.getElementById(elementId);
+      const el = document.getElementById(id);
       el.textContent = "";
-
-      const cursor = document.createElement("span");
-      cursor.className = "blinking-cursor";
-      el.appendChild(cursor);
-
-      function typeChar() {
+      function char() {
         if (i < line.length) {
-          cursor.remove();
-          el.textContent += line.charAt(i);
+          el.textContent += line.charAt(i++);
           el.appendChild(cursor);
-          i++;
-          setTimeout(typeChar, typingSpeed);
+          setTimeout(char, charSpeed);
         } else {
-          cursor.remove();
+          el.textContent += " ";
+          el.appendChild(cursor);
           callback();
         }
       }
-      typeChar();
+      char();
     }
 
     function startTyping() {
-      typeLine(lines[0], "line1", () => {
-        setTimeout(() => {
-          typeLine(lines[1], "line2", () => {
-            setTimeout(() => {
-              typeLine(lines[2], "line3", () => {
-                setTimeout(() => {
-                  window.location.href = "desktop.html";
-                }, 9000);
+      typeLine(lines[0],"line1", ()=>{
+        setTimeout(()=>{
+          document.getElementById("modem").play();
+          typeLine(lines[1],"line2", ()=>{
+            setTimeout(()=>{
+              typeLine(lines[2],"line3", ()=>{
+                setTimeout(()=>{
+                  window.location.href="desktop.html";
+                },9000);
               });
-            }, delayBetweenLines);
+            }, delayLines);
           });
-        }, delayBetweenLines);
+        }, delayLines);
       });
     }
 
     window.onload = () => {
-      setTimeout(showNextStage, 300); // starts stage2 after 300ms
+      document.getElementById("stage1").style.display = "flex";
+      setTimeout(showNextStage, 300);
     };
   </script>
 </body>
