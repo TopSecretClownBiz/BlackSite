@@ -1,88 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Booting Up...</title>
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body, html {
-    width: 100%;
-    height: 100%;
-    background-color: black;
-    font-family: monospace;
-    overflow: hidden;
-  }
-
-  .boot-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('assets/pics/fundos.png');
-    background-size: cover;  /* cover instead of contain for full screen */
-    background-repeat: no-repeat;
-    background-position: center;
-    z-index: 0;
-    opacity: 0.9; /* Slightly transparent for text visibility */
-  }
-
-  .boot-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 2vw;
-    color: #00FF00;
-    font-size: 1.3em;
-    z-index: 1;
-    pointer-events: none;
-    text-shadow: 0 0 5px #00ff00;
-  }
-
-  /* Media Queries for responsiveness */
-  @media (max-width: 600px) {
-    .boot-overlay {
-      font-size: 1em;
-      padding: 4vw;
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-  }
 
-  @media (min-width: 1200px) {
-    .boot-overlay {
-      font-size: 2em;
-      padding: 1vw 3vw;
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      font-family: monospace;
+      overflow: hidden;
+      color: #00FF00;
     }
-  }
-</style>
+
+    .boot-background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: url('assets/pics/fundos.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 0;
+      opacity: 0.9;
+    }
+
+    .boot-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 2vw;
+      z-index: 1;
+      pointer-events: none;
+      text-shadow: 0 0 5px #00ff00;
+      font-size: 1.3em;
+      line-height: 1.5em;
+      max-width: 90vw;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .blinking-cursor {
+      display: inline-block;
+      width: 10px;
+      background-color: #00ff00;
+      animation: blink 1s step-start infinite;
+      margin-left: 3px;
+      vertical-align: bottom;
+    }
+
+    @keyframes blink {
+      0%, 50% {
+        background-color: #00ff00;
+      }
+      51%, 100% {
+        background-color: transparent;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="boot-background"></div>
 
-  <div class="boot-overlay" id="boot-sequence">
-    <p>BOOTING CLOWN OPERATIONS SYSTEM...</p>
-    <p>LOADING MODULE: CLOWN.NET</p>
-    <p>LOADING: LAFF.DLL</p>
-    <p>EXECUTING: FUN.EXE</p>
-    <p>HONKING THE HORNS...</p>
-    <p>INITIALIZING MIRTH... OK</p>
-    <p>SEALING EXIT PORTALS... OK</p>
-    <p>LAUNCHING FUNDOS UI...</p>
+  <div class="boot-overlay">
+    <p id="line1"></p>
+    <p id="line2"></p>
+    <p id="line3"></p>
   </div>
 
   <audio autoplay>
-    <source src="assets/audio/dial-up-modem-02.mp3" type="audio/mpeg">
+    <source src="assets/audio/dial-up-modem-02.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 
   <script>
-    setTimeout(() => {
-      window.location.href = "desktop.html";
-    }, 15000); // Matches your sound timing
+    const lines = [
+      "BOOTING CLOWN OPERATIONS SYSTEM...",
+      "LOADING MODULE: CLOWN.NET / LAFF.DLL / FUN.EXE",
+      "HONKING THE HORNS..."
+    ];
+
+    const delayBetweenLines = 1000;  // ms pause before starting next line
+    const typingSpeed = 50; // ms per character
+
+    function typeLine(line, elementId, callback) {
+      let i = 0;
+      const el = document.getElementById(elementId);
+      el.textContent = "";
+
+      // create blinking cursor span
+      const cursor = document.createElement("span");
+      cursor.className = "blinking-cursor";
+      el.appendChild(cursor);
+
+      function typeChar() {
+        if (i < line.length) {
+          cursor.remove();
+          el.textContent += line.charAt(i);
+          el.appendChild(cursor);
+          i++;
+          setTimeout(typeChar, typingSpeed);
+        } else {
+          cursor.remove();
+          callback();
+        }
+      }
+      typeChar();
+    }
+
+    function startTyping() {
+      typeLine(lines[0], "line1", () => {
+        setTimeout(() => {
+          typeLine(lines[1], "line2", () => {
+            setTimeout(() => {
+              typeLine(lines[2], "line3", () => {
+                // all done — wait a moment then redirect
+                setTimeout(() => {
+                  window.location.href = "desktop.html";
+                }, 2000);
+              });
+            }, delayBetweenLines);
+          });
+        }, delayBetweenLines);
+      });
+    }
+
+    window.onload = startTyping;
   </script>
 </body>
 </html>
