@@ -19,58 +19,49 @@
       color: #00FF00;
     }
 
-    .mem-dump, .squiggle, .boot-background, .boot-overlay {
+    .screen {
       position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
       height: 100%;
-    }
-
-    .mem-dump, .squiggle {
-      background-color: black;
-      color: #00FF00;
-      font-size: 2vw;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      font-size: 4vw;
       white-space: pre;
       z-index: 2;
     }
 
-    .hidden {
-      display: none;
+    #memDump, #squiggle {
+      background-color: black;
     }
 
-    .squiggle {
-      animation: verticalGlitch 0.2s ease-in-out;
+    #bootOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 2vw;
+      z-index: 3;
+      font-size: 1.5em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-shadow: 0 0 5px #00FF00;
+      pointer-events: none;
     }
 
-    @keyframes verticalGlitch {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(10px); }
-    }
-
-    .boot-background {
+    #bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
       background-image: url('assets/pics/fundos.png');
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
       opacity: 0.9;
-      z-index: 0;
+      z-index: 1;
     }
 
-    .boot-overlay {
-      padding: 2vw;
-      z-index: 1;
-      pointer-events: none;
-      text-shadow: 0 0 5px #00ff00;
-      font-size: 1.3em;
-      line-height: 1.5em;
-      max-width: 90vw;
-      white-space: nowrap;
-      overflow: hidden;
+    .hidden {
+      display: none;
     }
 
     .blinking-cursor {
@@ -86,27 +77,30 @@
       0%, 50% { background-color: #00ff00; }
       51%, 100% { background-color: transparent; }
     }
+
+    @keyframes verticalGlitch {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(20px); }
+    }
+
+    #squiggle {
+      animation: verticalGlitch 0.3s ease-in-out;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Memory Dump -->
-  <div id="mem" class="mem-dump">█▒▓▒█▒▓█▓▒█▒▓▓▒▓▒█▓▒▓█▒▓▒▓▒</div>
+  <div id="memDump" class="screen">█▒▓▒█▒▓█▓▒█▒▓▓▒▓▒█▓▒▓█▒▓▒▓▒</div>
+  <div id="squiggle" class="screen hidden">▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓</div>
+  <div id="bg" class="hidden"></div>
 
-  <!-- Squiggle Glitch -->
-  <div id="squiggle" class="squiggle hidden">▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓▒▓</div>
-
-  <!-- Background Image -->
-  <div id="bg" class="boot-background hidden"></div>
-
-  <!-- Overlay Text -->
-  <div class="boot-overlay">
+  <div id="bootOverlay" class="hidden">
     <p id="line1"></p>
     <p id="line2"></p>
     <p id="line3"></p>
   </div>
 
-  <!-- Audio -->
   <audio id="beep" src="assets/audio/beep-02.mp3"></audio>
   <audio id="modem" src="assets/audio/dial-up-modem-02.mp3"></audio>
 
@@ -116,15 +110,13 @@
       "LOADING MODULE: CLOWN.NET / LAFF.DLL / FUN.EXE",
       "HONKING THE HORNS..."
     ];
-
-    const delayLines = 800;
+    const delayBetweenLines = 800;
     const typingSpeed = 50;
 
     function typeLine(line, elementId, callback) {
-      let i = 0;
       const el = document.getElementById(elementId);
+      let i = 0;
       el.textContent = "";
-
       const cursor = document.createElement("span");
       cursor.className = "blinking-cursor";
       el.appendChild(cursor);
@@ -141,11 +133,11 @@
           callback();
         }
       }
-
       typeChar();
     }
 
     function startTyping() {
+      document.getElementById("bootOverlay").classList.remove("hidden");
       typeLine(lines[0], "line1", () => {
         setTimeout(() => {
           document.getElementById("modem").play();
@@ -154,30 +146,30 @@
               typeLine(lines[2], "line3", () => {
                 setTimeout(() => {
                   window.location.href = "desktop.html";
-                }, 9000); // Final wait time (modem + text complete)
+                }, 9000); // full wait for modem
               });
-            }, delayLines);
+            }, delayBetweenLines);
           });
-        }, delayLines);
+        }, delayBetweenLines);
       });
     }
 
     window.onload = () => {
       const beep = document.getElementById("beep");
-      const mem = document.getElementById("mem");
+      const mem = document.getElementById("memDump");
       const squiggle = document.getElementById("squiggle");
       const bg = document.getElementById("bg");
 
-      // Play beep immediately
-      beep.play().catch(e => console.log("Beep blocked:", e));
+      // Play beep instantly
+      beep.play().catch(e => console.warn("Beep autoplay blocked:", e));
 
-      // Mem glitch screen
+      // Show squiggle after 300ms
       setTimeout(() => {
         mem.classList.add("hidden");
         squiggle.classList.remove("hidden");
       }, 300);
 
-      // Squiggle effect and start typing
+      // Show background + boot typing after 600ms
       setTimeout(() => {
         squiggle.classList.add("hidden");
         bg.classList.remove("hidden");
