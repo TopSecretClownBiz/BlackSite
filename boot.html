@@ -54,6 +54,7 @@
       animation: blink 1s step-start infinite;
       margin-left: 3px;
       vertical-align: bottom;
+      transform: translateY(2px); /* Nudges cursor down */
     }
 
     @keyframes blink {
@@ -76,11 +77,11 @@
   </div>
 
   <!-- Sounds -->
-  <audio id="beep">
+  <audio id="beep" preload="auto">
     <source src="assets/audio/beep-2.mp3" type="audio/mpeg" />
   </audio>
 
-  <audio id="modem">
+  <audio id="modem" preload="auto">
     <source src="assets/audio/dial-up-modem-02.mp3" type="audio/mpeg" />
   </audio>
 
@@ -91,8 +92,8 @@
       "HONKING THE HORNS..."
     ];
 
-    const delayBetweenLines = 1000;
-    const typingSpeed = 50;
+    const delayBetweenLines = 1000; // ms pause before each line
+    const typingSpeed = 50; // ms per char
 
     function typeLine(line, elementId, callback, keepCursor = false) {
       let i = 0;
@@ -119,13 +120,13 @@
       typeChar();
     }
 
-    function startTyping() {
+    function startTypingSequence() {
       typeLine(lines[0], "line1", () => {
         setTimeout(() => {
           typeLine(lines[1], "line2", () => {
             setTimeout(() => {
               typeLine(lines[2], "line3", () => {
-                // leave the cursor on final line
+                // final cursor stays here
               }, true);
             }, delayBetweenLines);
           });
@@ -134,17 +135,24 @@
     }
 
     window.onload = () => {
-      document.getElementById("beep").play();
+      const beep = document.getElementById("beep");
+      const modem = document.getElementById("modem");
+
+      // Try to force audio loading
+      beep.play().catch(() => {});
       setTimeout(() => {
-        document.getElementById("modem").play();
+        modem.play().catch(() => {});
+      }, 1000); // 1 second after beep
+
+      // Add 1 sec pause after beep before typing begins
+      setTimeout(() => {
+        startTypingSequence();
       }, 1000);
 
-      startTyping();
-
-      // redirect after 9 seconds
+      // Give the whole sequence 10 seconds before redirect
       setTimeout(() => {
         window.location.href = "desktop.html";
-      }, 9000);
+      }, 10000);
     };
   </script>
 </body>
