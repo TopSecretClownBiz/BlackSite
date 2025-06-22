@@ -4,12 +4,7 @@
   <meta charset="UTF-8" />
   <title>Booting Up...</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       width: 100%;
       height: 100%;
@@ -60,21 +55,21 @@
       z-index: 1;
     }
 
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
 
-    .blinking-cursor {
+    .blinking-cursor::after {
+      content: "";
       display: inline-block;
       width: 10px;
-      background-color: #00ff00;
+      height: 1em;
+      background-color: #00FF00;
       animation: blink 1s step-start infinite;
       margin-left: 3px;
       vertical-align: bottom;
     }
 
     @keyframes blink {
-      0%, 50% { background-color: #00ff00; }
+      0%, 50% { background-color: #00FF00; }
       51%, 100% { background-color: transparent; }
     }
 
@@ -84,9 +79,7 @@
       100% { transform: translateY(20px); }
     }
 
-    #squiggle {
-      animation: verticalGlitch 0.3s ease-in-out;
-    }
+    #squiggle { animation: verticalGlitch 0.3s ease-in-out; }
   </style>
 </head>
 <body>
@@ -96,7 +89,7 @@
   <div id="bg" class="hidden"></div>
 
   <div id="bootOverlay" class="hidden">
-    <p id="line1"></p>
+    <p id="line1" class="blinking-cursor"></p>
     <p id="line2"></p>
     <p id="line3"></p>
   </div>
@@ -110,47 +103,47 @@
       "LOADING MODULE: CLOWN.NET / LAFF.DLL / FUN.EXE",
       "HONKING THE HORNS..."
     ];
-    const delayBetweenLines = 800;
-    const typingSpeed = 50;
+
+    const typingSpeed = 50; // per character
+    const lineDelay = 800;  // pause between lines
 
     function typeLine(line, elementId, callback) {
       const el = document.getElementById(elementId);
       let i = 0;
       el.textContent = "";
-      const cursor = document.createElement("span");
-      cursor.className = "blinking-cursor";
-      el.appendChild(cursor);
 
       function typeChar() {
         if (i < line.length) {
-          cursor.remove();
           el.textContent += line.charAt(i);
-          el.appendChild(cursor);
           i++;
           setTimeout(typeChar, typingSpeed);
         } else {
-          cursor.remove();
           callback();
         }
       }
+
       typeChar();
     }
 
     function startTyping() {
       document.getElementById("bootOverlay").classList.remove("hidden");
+
       typeLine(lines[0], "line1", () => {
+        // 👂 Start modem immediately after 1st line finishes
+        document.getElementById("modem").play();
+
         setTimeout(() => {
-          document.getElementById("modem").play();
           typeLine(lines[1], "line2", () => {
             setTimeout(() => {
               typeLine(lines[2], "line3", () => {
+                // Wait for modem to finish (9 seconds total)
                 setTimeout(() => {
                   window.location.href = "desktop.html";
-                }, 9000); // full wait for modem
+                }, 9000);
               });
-            }, delayBetweenLines);
+            }, lineDelay);
           });
-        }, delayBetweenLines);
+        }, lineDelay);
       });
     }
 
@@ -160,16 +153,13 @@
       const squiggle = document.getElementById("squiggle");
       const bg = document.getElementById("bg");
 
-      // Play beep instantly
-      beep.play().catch(e => console.warn("Beep autoplay blocked:", e));
+      beep.play().catch(e => console.warn("BEEP failed:", e));
 
-      // Show squiggle after 300ms
       setTimeout(() => {
         mem.classList.add("hidden");
         squiggle.classList.remove("hidden");
       }, 300);
 
-      // Show background + boot typing after 600ms
       setTimeout(() => {
         squiggle.classList.add("hidden");
         bg.classList.remove("hidden");
