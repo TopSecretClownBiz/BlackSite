@@ -38,6 +38,10 @@
       z-index: 2;
     }
 
+    .hidden {
+      display: none;
+    }
+
     .squiggle {
       animation: verticalGlitch 0.2s ease-in-out;
     }
@@ -137,6 +141,7 @@
           callback();
         }
       }
+
       typeChar();
     }
 
@@ -149,7 +154,7 @@
               typeLine(lines[2], "line3", () => {
                 setTimeout(() => {
                   window.location.href = "desktop.html";
-                }, 8500); // adjust for full modem play
+                }, 9000); // Final wait time (modem + text complete)
               });
             }, delayLines);
           });
@@ -157,20 +162,27 @@
       });
     }
 
-    // Startup Sequence
     window.onload = () => {
-      document.getElementById("beep").play();
+      const beep = document.getElementById("beep");
+      const mem = document.getElementById("mem");
+      const squiggle = document.getElementById("squiggle");
+      const bg = document.getElementById("bg");
 
-      setTimeout(() => {
-        document.getElementById("mem").classList.add("hidden");
-        document.getElementById("squiggle").classList.remove("hidden");
-      }, 300); // mem duration
+      // Play beep immediately
+      beep.play().catch(e => console.log("Beep blocked:", e));
 
+      // Mem glitch screen
       setTimeout(() => {
-        document.getElementById("squiggle").classList.add("hidden");
-        document.getElementById("bg").classList.remove("hidden");
+        mem.classList.add("hidden");
+        squiggle.classList.remove("hidden");
+      }, 300);
+
+      // Squiggle effect and start typing
+      setTimeout(() => {
+        squiggle.classList.add("hidden");
+        bg.classList.remove("hidden");
         startTyping();
-      }, 600); // squiggle duration
+      }, 600);
     };
   </script>
 </body>
