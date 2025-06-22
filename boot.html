@@ -10,7 +10,7 @@
       box-sizing: border-box;
     }
 
-    body, html {
+    html, body {
       width: 100%;
       height: 100%;
       background-color: black;
@@ -73,6 +73,7 @@
     <p id="line1"></p>
     <p id="line2"></p>
     <p id="line3"></p>
+    <span id="cursor" class="blinking-cursor"></span>
   </div>
 
   <audio id="beep" src="assets/audio/beep-2.mp3"></audio>
@@ -88,31 +89,31 @@
     const delayBetweenLines = 1000;
     const typingSpeed = 50;
 
+    const cursor = document.getElementById("cursor");
+
     function typeLine(line, elementId, callback) {
       let i = 0;
       const el = document.getElementById(elementId);
       el.textContent = "";
 
-      const cursor = document.createElement("span");
-      cursor.className = "blinking-cursor";
-      el.appendChild(cursor);
-
       function typeChar() {
         if (i < line.length) {
-          cursor.remove();
           el.textContent += line.charAt(i);
-          el.appendChild(cursor);
           i++;
+          positionCursor(el);
           setTimeout(typeChar, typingSpeed);
         } else {
-          cursor.remove();
           el.textContent += " ";
-          el.appendChild(cursor);
+          positionCursor(el);
           callback();
         }
       }
 
       typeChar();
+    }
+
+    function positionCursor(el) {
+      el.appendChild(cursor);
     }
 
     function startTyping() {
@@ -121,9 +122,10 @@
           typeLine(lines[1], "line2", () => {
             setTimeout(() => {
               typeLine(lines[2], "line3", () => {
+                // done typing, redirect after full duration
                 setTimeout(() => {
                   window.location.href = "desktop.html";
-                }, 9000); // long enough for modem
+                }, 9000);
               });
             }, delayBetweenLines);
           });
@@ -135,16 +137,16 @@
       const beep = document.getElementById("beep");
       const modem = document.getElementById("modem");
 
-      // Play beep, then modem, then start typing
+      // Try to play beep, then modem, then typing
       beep.play().then(() => {
         setTimeout(() => {
           modem.play();
-          setTimeout(startTyping, 1000); // pause after modem starts before typing
+          setTimeout(startTyping, 1000); // let modem breathe a bit
         }, 1000);
-      }).catch((e) => {
-        // Fallback: maybe autoplay blocked, start modem and typing anyway
+      }).catch(() => {
+        // fallback if beep fails (e.g. autoplay blocked)
         modem.play();
-        startTyping();
+        setTimeout(startTyping, 1000);
       });
     };
   </script>
