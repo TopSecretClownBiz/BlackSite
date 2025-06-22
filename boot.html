@@ -4,67 +4,67 @@
   <meta charset="UTF-8">
   <title>Booting Up...</title>
   <style>
-    body {
-      background-color: black;
-      color: #00ff00;
-      font-family: monospace;
-      font-size: 1.2em;
-      padding: 20px;
-      text-align: center;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    img {
-      margin-top: 30px;
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      font-family: monospace;
+      overflow: hidden;
+    }
+
+    .boot-background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: url('assets/pics/clownface.png');
+      background-size: cover;
+      background-position: center;
+      z-index: 0;
+      opacity: 0.9; /* Slightly transparent for text visibility */
+    }
+
+    .boot-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 2vw;
+      color: #00FF00;
+      font-size: 1.3em;
+      z-index: 1;
+      pointer-events: none;
+      text-shadow: 0 0 5px #00ff00;
     }
   </style>
 </head>
 <body>
+  <div class="boot-background"></div>
 
-  <div id="boot-sequence"></div>
+  <div class="boot-overlay" id="boot-sequence">
+    <p>BOOTING CLOWN OPERATIONS SYSTEM...</p>
+    <p>LOADING MODULE: CLOWN.NET</p>
+    <p>LOADING: LAFF.DLL</p>
+    <p>EXECUTING: FUN.EXE</p>
+    <p>HONKING THE HORNS...</p>
+    <p>INITIALIZING MIRTH... OK</p>
+    <p>SEALING EXIT PORTALS... OK</p>
+    <p>LAUNCHING FUNDOS UI...</p>
+  </div>
 
-  <img src="assets/pics/fundos.png" alt="Evil Clown Face" style="max-width: 300px;">
-
-  <audio id="bootSound">
+  <audio autoplay>
     <source src="assets/audio/dial-up-modem-02.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
   <script>
-    const lines = [
-      "BOOTING CLOWN OPERATIONS SYSTEM...",
-      "LOADING MODULE: CLOWN.NET / LAFF.DLL / FUN.EXE",
-      "HONKING THE HORNS...",
-      "INJECTING WHIMSY INTO REGISTRY...",
-      "UNPACKING BIG SHOES...",
-      "███▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 10%",
-      "███▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 24%",
-      "███▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 47%",
-      "████████████████████████████ 100%",
-      "BOOT COMPLETE. INITIATING DESKTOP SEQUENCE..."
-    ];
-
-    let i = 0;
-    const container = document.getElementById("boot-sequence");
-
-    function typeLine() {
-      if (i < lines.length) {
-        const p = document.createElement("p");
-        p.textContent = lines[i];
-        container.appendChild(p);
-        i++;
-        setTimeout(typeLine, 1000);
-      }
-    }
-
-    window.onload = () => {
-      typeLine();
-      document.getElementById("bootSound").play().catch(e => {
-        console.warn("Autoplay blocked");
-      });
-    };
-
     setTimeout(() => {
       window.location.href = "desktop.html";
-    }, 15000);
+    }, 15000); // Matches your sound timing
   </script>
 </body>
 </html>
