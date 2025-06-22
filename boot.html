@@ -6,30 +6,65 @@
   <style>
     body {
       background-color: black;
-      color: green;
+      color: #00ff00;
       font-family: monospace;
-      font-size: 1.5em;
+      font-size: 1.2em;
       padding: 20px;
+      text-align: center;
     }
-    .hidden { display: none; }
+    img {
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
-  <div id="boot-sequence">
-    <p>BOOTING CLOWN OPERATIONS SYSTEM...</p>
-    <p>LOADING MODULE: CLOWN.NET / LAFF.DLL / FUN.EXE</p>
-    <p>HONKING THE HORNS...</p>
-  </div>
 
-  <audio autoplay>
+  <div id="boot-sequence"></div>
+
+  <img src="assets/pics/fundos.png" alt="Evil Clown Face" style="max-width: 300px;">
+
+  <audio id="bootSound">
     <source src="assets/audio/dial-up-modem-02.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 
   <script>
+    const lines = [
+      "BOOTING CLOWN OPERATIONS SYSTEM...",
+      "LOADING MODULE: CLOWN.NET / LAFF.DLL / FUN.EXE",
+      "HONKING THE HORNS...",
+      "INJECTING WHIMSY INTO REGISTRY...",
+      "UNPACKING BIG SHOES...",
+      "███▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 10%",
+      "███▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 24%",
+      "███▓▓▓▓▓▓▓▓▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ 47%",
+      "████████████████████████████ 100%",
+      "BOOT COMPLETE. INITIATING DESKTOP SEQUENCE..."
+    ];
+
+    let i = 0;
+    const container = document.getElementById("boot-sequence");
+
+    function typeLine() {
+      if (i < lines.length) {
+        const p = document.createElement("p");
+        p.textContent = lines[i];
+        container.appendChild(p);
+        i++;
+        setTimeout(typeLine, 1000);
+      }
+    }
+
+    window.onload = () => {
+      typeLine();
+      document.getElementById("bootSound").play().catch(e => {
+        console.warn("Autoplay blocked");
+      });
+    };
+
     setTimeout(() => {
-      window.location.href = "desktop.html"; // or wherever the next step goes
-    }, 15000); // matches your 15 sec dial-up noise
+      window.location.href = "desktop.html";
+    }, 15000);
   </script>
 </body>
 </html>
