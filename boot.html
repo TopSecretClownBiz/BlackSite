@@ -57,8 +57,7 @@
 
     .hidden { display: none; }
 
-    .blinking-cursor::after {
-      content: "";
+    .blinking-cursor {
       display: inline-block;
       width: 10px;
       height: 1em;
@@ -89,9 +88,10 @@
   <div id="bg" class="hidden"></div>
 
   <div id="bootOverlay" class="hidden">
-    <p id="line1" class="blinking-cursor"></p>
+    <p id="line1"></p>
     <p id="line2"></p>
     <p id="line3"></p>
+    <span id="cursor" class="blinking-cursor"></span>
   </div>
 
   <audio id="beep" src="assets/audio/beep-02.mp3"></audio>
@@ -104,17 +104,20 @@
       "HONKING THE HORNS..."
     ];
 
-    const typingSpeed = 50; // per character
-    const lineDelay = 800;  // pause between lines
+    const typingSpeed = 50;
+    const lineDelay = 800;
 
     function typeLine(line, elementId, callback) {
       const el = document.getElementById(elementId);
+      const cursor = document.getElementById("cursor");
       let i = 0;
       el.textContent = "";
+      el.appendChild(cursor); // Move cursor to this line
 
       function typeChar() {
         if (i < line.length) {
           el.textContent += line.charAt(i);
+          el.appendChild(cursor); // Keep cursor at the end
           i++;
           setTimeout(typeChar, typingSpeed);
         } else {
@@ -129,17 +132,16 @@
       document.getElementById("bootOverlay").classList.remove("hidden");
 
       typeLine(lines[0], "line1", () => {
-        // 👂 Start modem immediately after 1st line finishes
-        document.getElementById("modem").play();
+        const modem = document.getElementById("modem");
+        modem.play();
 
         setTimeout(() => {
           typeLine(lines[1], "line2", () => {
             setTimeout(() => {
               typeLine(lines[2], "line3", () => {
-                // Wait for modem to finish (9 seconds total)
-                setTimeout(() => {
+                modem.onended = () => {
                   window.location.href = "desktop.html";
-                }, 10000);
+                };
               });
             }, lineDelay);
           });
