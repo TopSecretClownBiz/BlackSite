@@ -42,25 +42,28 @@
       font-size: 1.3em;
       line-height: 1.5em;
       max-width: 90vw;
-      white-space: nowrap;
-      overflow: hidden;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      overflow: visible;
     }
 
     .blinking-cursor {
       display: inline-block;
       width: 10px;
+      height: 1.2em;
       background-color: #00ff00;
-      animation: blink 1s step-start infinite;
+      animation: blink 1s steps(2, start) infinite;
       margin-left: 3px;
       vertical-align: bottom;
+      pointer-events: none;
     }
 
     @keyframes blink {
       0%, 50% {
-        background-color: #00ff00;
+        opacity: 1;
       }
       51%, 100% {
-        background-color: transparent;
+        opacity: 0;
       }
     }
   </style>
