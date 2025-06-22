@@ -10,7 +10,7 @@
       box-sizing: border-box;
     }
 
-    html, body {
+    body, html {
       width: 100%;
       height: 100%;
       background-color: black;
@@ -50,16 +50,15 @@
       display: inline-block;
       width: 10px;
       height: 1em;
-      background-color: #00FF00;
+      background-color: #00ff00;
       animation: blink 1s step-start infinite;
       margin-left: 3px;
       vertical-align: bottom;
-      transform: translateY(2px); /* Nudges cursor down */
     }
 
     @keyframes blink {
       0%, 50% {
-        background-color: #00FF00;
+        background-color: #00ff00;
       }
       51%, 100% {
         background-color: transparent;
@@ -76,14 +75,8 @@
     <p id="line3"></p>
   </div>
 
-  <!-- Sounds -->
-  <audio id="beep" preload="auto">
-    <source src="assets/audio/beep-2.mp3" type="audio/mpeg" />
-  </audio>
-
-  <audio id="modem" preload="auto">
-    <source src="assets/audio/dial-up-modem-02.mp3" type="audio/mpeg" />
-  </audio>
+  <audio id="beep" src="assets/audio/beep-2.mp3"></audio>
+  <audio id="modem" src="assets/audio/dial-up-modem-02.mp3"></audio>
 
   <script>
     const lines = [
@@ -92,10 +85,10 @@
       "HONKING THE HORNS..."
     ];
 
-    const delayBetweenLines = 1000; // ms pause before each line
-    const typingSpeed = 50; // ms per char
+    const delayBetweenLines = 1000;
+    const typingSpeed = 50;
 
-    function typeLine(line, elementId, callback, keepCursor = false) {
+    function typeLine(line, elementId, callback) {
       let i = 0;
       const el = document.getElementById(elementId);
       el.textContent = "";
@@ -112,7 +105,9 @@
           i++;
           setTimeout(typeChar, typingSpeed);
         } else {
-          if (!keepCursor) cursor.remove();
+          cursor.remove();
+          el.textContent += " ";
+          el.appendChild(cursor);
           callback();
         }
       }
@@ -120,14 +115,16 @@
       typeChar();
     }
 
-    function startTypingSequence() {
+    function startTyping() {
       typeLine(lines[0], "line1", () => {
         setTimeout(() => {
           typeLine(lines[1], "line2", () => {
             setTimeout(() => {
               typeLine(lines[2], "line3", () => {
-                // final cursor stays here
-              }, true);
+                setTimeout(() => {
+                  window.location.href = "desktop.html";
+                }, 9000); // long enough for modem
+              });
             }, delayBetweenLines);
           });
         }, delayBetweenLines);
@@ -138,21 +135,17 @@
       const beep = document.getElementById("beep");
       const modem = document.getElementById("modem");
 
-      // Try to force audio loading
-      beep.play().catch(() => {});
-      setTimeout(() => {
-        modem.play().catch(() => {});
-      }, 1000); // 1 second after beep
-
-      // Add 1 sec pause after beep before typing begins
-      setTimeout(() => {
-        startTypingSequence();
-      }, 1000);
-
-      // Give the whole sequence 10 seconds before redirect
-      setTimeout(() => {
-        window.location.href = "desktop.html";
-      }, 10000);
+      // Play beep, then modem, then start typing
+      beep.play().then(() => {
+        setTimeout(() => {
+          modem.play();
+          setTimeout(startTyping, 1000); // pause after modem starts before typing
+        }, 1000);
+      }).catch((e) => {
+        // Fallback: maybe autoplay blocked, start modem and typing anyway
+        modem.play();
+        startTyping();
+      });
     };
   </script>
 </body>
