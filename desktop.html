@@ -1,157 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FUNDOS</title>
-  <link rel="stylesheet" href="css/desktop.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FUNDOS Desktop</title>
+  <link rel="stylesheet" href="../css/desktop.css">
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+      background: #0a0a0a;
       font-family: monospace;
-      background: #1a1a1a url('assets/pics/your-wallpaper.png') center/cover no-repeat;
+      overflow: hidden;
     }
     .desktop {
-      position: relative;
       width: 100vw;
       height: 100vh;
+      background: url('../assets/pics/fundos-wallpaper.png') no-repeat center center;
+      background-size: cover;
+      position: relative;
     }
     .icon {
-      color: white;
-      width: 80px;
+      width: 64px;
       text-align: center;
-      cursor: pointer;
       margin: 10px;
-      position: absolute;
-      top: 40px;
-      left: 40px;
+      cursor: pointer;
+      color: white;
     }
     .window {
-      position: absolute;
       width: 400px;
       height: 300px;
-      background: #111;
-      border: 2px solid #0f0;
-      color: #0f0;
+      border: 2px solid #444;
+      position: absolute;
+      background: #eee;
+      box-shadow: 4px 4px 0 #222;
       resize: both;
       overflow: auto;
-      box-shadow: 0 0 20px #0f0;
-      z-index: 10;
+      top: 100px;
+      left: 100px;
     }
-    .titlebar {
-      background: #0f0;
-      color: black;
+    .title-bar {
+      background: #333;
+      color: #fff;
       padding: 4px;
+      display: flex;
+      justify-content: space-between;
       cursor: move;
+      user-select: none;
     }
-    iframe {
-      width: 100%;
-      height: calc(100% - 25px);
-      border: none;
+    .window-controls button {
+      margin-left: 4px;
+      font-size: 12px;
     }
-    .taskbar {
+    .tab-content {
+      display: none;
+      padding: 10px;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    #start-menu {
       position: absolute;
       bottom: 0;
       left: 0;
-      right: 0;
+      background: #111;
+      color: white;
+      width: 200px;
+      display: none;
+    }
+    #taskbar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
       height: 30px;
-      background: #000;
-      color: #0f0;
+      background: #111;
       display: flex;
       align-items: center;
       padding: 0 10px;
     }
-    .start-button {
-      background: #0f0;
-      color: #000;
-      padding: 2px 10px;
-      margin-right: 10px;
-      border: 1px solid #000;
+    #start-button {
+      background: #222;
+      color: white;
+      border: none;
+      padding: 5px 10px;
       cursor: pointer;
-    }
-    .start-menu {
-      position: absolute;
-      bottom: 30px;
-      left: 10px;
-      background: #111;
-      border: 2px solid #0f0;
-      color: #0f0;
-      display: none;
-      padding: 10px;
-      box-shadow: 0 0 10px #0f0;
-    }
-    .start-menu div {
-      padding: 5px 0;
-      cursor: pointer;
-    }
-    .start-menu div:hover {
-      background: #0f0;
-      color: #111;
     }
   </style>
 </head>
 <body>
   <div class="desktop" id="desktop">
-    <div class="icon" onclick="openWindow('programs/browser/index.html', 'ClownWeb')">
-      <img src="assets/icons/browser.png" width="48" /><br />ClownWeb
+    <div class="icon" onclick="openWindow('browser-window')">
+      <img src="../assets/icons/browser.png" alt="Browser" width="48">
+      <div>Browser</div>
     </div>
 
-    <div class="taskbar">
-      <div class="start-button" onclick="toggleStartMenu()">START</div>
-    </div>
-    <div class="start-menu" id="startMenu">
-      <div onclick="openWindow('programs/browser/index.html', 'ClownWeb')">ClownWeb</div>
-      <div onclick="openWindow('programs/torrentz/index.html', 'TorrentZ')">TorrentZ</div>
-      <div onclick="openWindow('programs/chat/index.html', 'ClownChat')">ClownChat</div>
-      <div onclick="openWindow('programs/email/index.html', 'Inbox.exe')">Inbox.exe</div>
-      <div onclick="openWindow('programs/winamp/index.html', 'WinClown')">WinClown</div>
+    <div class="window" id="browser-window" style="display:none;">
+      <div class="title-bar">
+        <span class="title">ClownBrowser 1.0</span>
+        <div class="window-controls">
+          <button class="tab-button" data-tab="tab-1">Tab 1</button>
+          <button class="tab-button" data-tab="tab-2">Tab 2</button>
+          <button class="close-button">X</button>
+        </div>
+      </div>
+      <div class="window-content">
+        <div class="tab-content active" id="tab-1">🎪 Welcome to Clown Tab 1</div>
+        <div class="tab-content" id="tab-2">🤡 This is Tab 2 — Honk if you love chaos</div>
+      </div>
     </div>
   </div>
 
-  <script src="js/desktop.js"></script>
+  <div id="taskbar">
+    <button id="start-button">START</button>
+  </div>
+  <div id="start-menu">
+    <div onclick="openWindow('browser-window')">ClownBrowser</div>
+  </div>
+
   <script>
-    function openWindow(url, title) {
-      const win = document.createElement('div');
-      win.classList.add('window');
-      win.style.top = Math.random() * 300 + 'px';
-      win.style.left = Math.random() * 300 + 'px';
-      win.innerHTML = `
-        <div class="titlebar" onmousedown="dragStart(event, this)">${title}</div>
-        <iframe src="${url}"></iframe>
-      `;
-      document.getElementById('desktop').appendChild(win);
+    function openWindow(id) {
+      document.getElementById(id).style.display = 'block';
     }
 
-    let dragObj = null;
-    function dragStart(e, el) {
-      dragObj = el.parentNode;
-      window.addEventListener('mousemove', drag);
-      window.addEventListener('mouseup', dragEnd);
-    }
-    function drag(e) {
-      if (!dragObj) return;
-      dragObj.style.left = e.clientX - 100 + 'px';
-      dragObj.style.top = e.clientY - 10 + 'px';
-    }
-    function dragEnd() {
-      window.removeEventListener('mousemove', drag);
-      window.removeEventListener('mouseup', dragEnd);
-      dragObj = null;
-    }
+    document.querySelectorAll(".close-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        btn.closest(".window").style.display = "none";
+      });
+    });
 
-    function toggleStartMenu() {
-      const menu = document.getElementById('startMenu');
-      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
+    document.querySelectorAll(".tab-button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const window = btn.closest(".window");
+        const tabs = window.querySelectorAll(".tab-content");
+        tabs.forEach(tab => tab.classList.remove("active"));
+        const tabId = btn.getAttribute("data-tab");
+        const target = window.querySelector(`#${tabId}`);
+        if (target) target.classList.add("active");
+      });
+    });
 
-    window.addEventListener('click', function (e) {
-      if (!e.target.closest('.start-button') && !e.target.closest('.start-menu')) {
-        document.getElementById('startMenu').style.display = 'none';
-      }
+    document.querySelectorAll(".window").forEach(win => {
+      const bar = win.querySelector(".title-bar");
+      let offsetX, offsetY;
+      bar.addEventListener("mousedown", (e) => {
+        offsetX = e.clientX - win.offsetLeft;
+        offsetY = e.clientY - win.offsetTop;
+        function dragMove(e) {
+          win.style.left = (e.clientX - offsetX) + "px";
+          win.style.top = (e.clientY - offsetY) + "px";
+        }
+        document.addEventListener("mousemove", dragMove);
+        document.addEventListener("mouseup", () => {
+          document.removeEventListener("mousemove", dragMove);
+        }, { once: true });
+      });
+    });
+
+    const startButton = document.getElementById('start-button');
+    const startMenu = document.getElementById('start-menu');
+    startButton.addEventListener('click', () => {
+      startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'block';
     });
   </script>
 </body>
