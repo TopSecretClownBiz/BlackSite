@@ -27,38 +27,10 @@
       margin: 10px;
       cursor: pointer;
       color: white;
+      display: inline-block;
     }
-    .window {
-      width: 400px;
-      height: 300px;
-      border: 2px solid #444;
-      position: absolute;
-      background: #eee;
-      box-shadow: 4px 4px 0 #222;
-      resize: both;
-      overflow: auto;
-      top: 100px;
-      left: 100px;
-    }
-    .title-bar {
-      background: #333;
-      color: #fff;
-      padding: 4px;
-      display: flex;
-      justify-content: space-between;
-      cursor: move;
-      user-select: none;
-    }
-    .window-controls button {
-      margin-left: 4px;
-      font-size: 12px;
-    }
-    .tab-content {
-      display: none;
-      padding: 10px;
-    }
-    .tab-content.active {
-      display: block;
+    .icon img {
+      width: 48px;
     }
     #start-menu {
       position: absolute;
@@ -107,24 +79,42 @@
 </head>
 <body>
   <div class="desktop" id="desktop">
-    <div class="icon" onclick="openWindow('browser-window')">
-      <img src="../assets/icons/browser.png" alt="Browser" width="48">
+    <!-- Icons -->
+    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/browser/')">
+      <img src="../assets/icons/browser.png" alt="Browser">
       <div>Browser</div>
     </div>
-
-    <div class="window" id="browser-window" style="display:none;">
-      <div class="title-bar">
-        <span class="title">ClownBrowser 1.0</span>
-        <div class="window-controls">
-          <button class="tab-button" data-tab="tab-1">Tab 1</button>
-          <button class="tab-button" data-tab="tab-2">Tab 2</button>
-          <button class="close-button">X</button>
-        </div>
-      </div>
-      <div class="window-content">
-        <div class="tab-content active" id="tab-1">🎪 Welcome to Clown Tab 1</div>
-        <div class="tab-content" id="tab-2">🤡 This is Tab 2 — Honk if you love chaos</div>
-      </div>
+    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/chat/')">
+      <img src="../assets/icons/chat.png" alt="Chat">
+      <div>Chat</div>
+    </div>
+    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/debugger/')">
+      <img src="../assets/icons/debugger.png" alt="Debugger">
+      <div>Debugger</div>
+    </div>
+    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/downloads/')">
+      <img src="../assets/icons/downloads.png" alt="Downloads">
+      <div>Downloads</div>
+    </div>
+    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/email/')">
+      <img src="../assets/icons/email.png" alt="Email">
+      <div>Email</div>
+    </div>
+    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/funamp/')">
+      <img src="../assets/icons/funamp.png" alt="Funamp">
+      <div>Funamp</div>
+    </div>
+    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/games/')">
+      <img src="../assets/icons/games.png" alt="Games">
+      <div>Games</div>
+    </div>
+    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/torrentz/')">
+      <img src="../assets/icons/torrentz.png" alt="Torrentz">
+      <div>Torrentz</div>
+    </div>
+    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/webcam/')">
+      <img src="../assets/icons/webcam.png" alt="Webcam">
+      <div>Webcam</div>
     </div>
   </div>
 
@@ -144,44 +134,6 @@
   </div>
 
   <script>
-    function openWindow(id) {
-      document.getElementById(id).style.display = 'block';
-    }
-
-    document.querySelectorAll(".close-button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        btn.closest(".window").style.display = "none";
-      });
-    });
-
-    document.querySelectorAll(".tab-button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const window = btn.closest(".window");
-        const tabs = window.querySelectorAll(".tab-content");
-        tabs.forEach(tab => tab.classList.remove("active"));
-        const tabId = btn.getAttribute("data-tab");
-        const target = window.querySelector(`#${tabId}`);
-        if (target) target.classList.add("active");
-      });
-    });
-
-    document.querySelectorAll(".window").forEach(win => {
-      const bar = win.querySelector(".title-bar");
-      let offsetX, offsetY;
-      bar.addEventListener("mousedown", (e) => {
-        offsetX = e.clientX - win.offsetLeft;
-        offsetY = e.clientY - win.offsetTop;
-        function dragMove(e) {
-          win.style.left = (e.clientX - offsetX) + "px";
-          win.style.top = (e.clientY - offsetY) + "px";
-        }
-        document.addEventListener("mousemove", dragMove);
-        document.addEventListener("mouseup", () => {
-          document.removeEventListener("mousemove", dragMove);
-        }, { once: true });
-      });
-    });
-
     const startButton = document.getElementById('start-button');
     const startMenu = document.getElementById('start-menu');
     startButton.addEventListener('click', () => {
