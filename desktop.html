@@ -1,150 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FUNDOS Desktop</title>
-  <link rel="stylesheet" href="../css/desktop.css">
-  <style>
-    body {
-      margin: 0;
-      background: #0a0a0a;
-      font-family: monospace;
-      overflow: hidden;
-    }
-    .desktop {
-      width: 100vw;
-      height: 100vh;
-      background-image: url('https://topsecretclownbiz.github.io/BlackSite/assets/pics/clown-wallpaper-3.png');
-      background-repeat: repeat;
-      background-position: top left;
-      background-size: auto;
-      position: relative;
-    }
-    .icon {
-      width: 64px;
-      text-align: center;
-      margin: 10px;
-      cursor: pointer;
-      color: white;
-      display: inline-block;
-    }
-    .icon img {
-      width: 48px;
-    }
-    #start-menu {
-      position: absolute;
-      bottom: 30px;
-      left: 0;
-      background: limegreen;
-      color: black;
-      width: 12.5vw;
-      height: 50vh;
-      padding: 10px;
-      display: none;
-      flex-direction: column;
-      font-weight: bold;
-      overflow-y: auto;
-      box-shadow: 2px 2px 10px black;
-      z-index: 100;
-    }
-    #start-menu a {
-      text-decoration: none;
-      color: black;
-      margin: 6px 0;
-      display: block;
-    }
-    #taskbar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 30px;
-      background: limegreen;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
-      box-shadow: 0 -2px 5px rgba(0,0,0,0.5);
-      z-index: 99;
-    }
-    #start-button {
-      background: #222;
-      color: lime;
-      border: 1px solid #000;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>fundOS Desktop</title>
+  <link rel="stylesheet" href="../css/desktop.css" />
 </head>
 <body>
-  <div class="desktop" id="desktop">
-    <!-- Icons with capitalized text display -->
-    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/browser/')">
-      <img src="https://topsecretclownbiz.github.io/BlackSite/assets/icons/browser.png" alt="Browser">
-      <div>Browser</div>
+  <div id="desktop" style="background-image: url('../assets/pics/clown-wallpaper-2.png');">
+    <!-- Icons go here -->
+    <div class="icon" onclick="openWindow('browser')">
+      <img src="../assets/icons/browser.png" alt="Browser" />
+      <span>Browser</span>
     </div>
-    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/chat/')">
-      <img src="https://topsecretclownbiz.github.io/BlackSite/assets/icons/chat.png" alt="Chat">
-      <div>Chat</div>
+    <div class="icon" onclick="openWindow('chat')">
+      <img src="../assets/icons/chat.png" alt="Chat" />
+      <span>Chat</span>
     </div>
-    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/debugger/')">
-      <img src="https://topsecretclownbiz.github.io/BlackSite/assets/icons/debugger.png" alt="Debugger">
-      <div>Debugger</div>
+    <div class="icon" onclick="openWindow('debugger')">
+      <img src="../assets/icons/debugger.png" alt="Debugger" />
+      <span>Debugger</span>
     </div>
-    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/downloads/')">
-      <img src="https://topsecretclownbiz.github.io/BlackSite/assets/icons/downloads.png" alt="Downloads">
-      <div>Downloads</div>
+    <div class="icon" onclick="openWindow('downloads')">
+      <img src="../assets/icons/downloads.png" alt="Downloads" />
+      <span>Downloads</span>
     </div>
-    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/email/')">
-      <img src="https://topsecretclownbiz.github.io/BlackSite/assets/icons/email.png" alt="Email">
-      <div>Clown Mail</div>
+    <div class="icon" onclick="openWindow('email')">
+      <img src="../assets/icons/email.png" alt="Clown Mail" />
+      <span>Clown Mail</span>
     </div>
-    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/funamp/')">
-      <img src="https://topsecretclownbiz.github.io/BlackSite/assets/icons/funamp.png" alt="Funamp">
-      <div>Funamp</div>
+    <div class="icon" onclick="openWindow('funamp')">
+      <img src="../assets/icons/funamp.png" alt="Funamp" />
+      <span>Funamp</span>
     </div>
-    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/games/')">
-      <img src="https://topsecretclownbiz.github.io/BlackSite/assets/icons/games.png" alt="Games">
-      <div>Games</div>
+    <div class="icon" onclick="openWindow('games')">
+      <img src="../assets/icons/games.png" alt="Games" />
+      <span>Games</span>
     </div>
-    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/torrentz/')">
-      <img src="https://topsecretclownbiz.github.io/BlackSite/assets/icons/torrentz.png" alt="Torrentz">
-      <div>Torrentz</div>
+    <div class="icon" onclick="openWindow('torrentz')">
+      <img src="../assets/icons/torrentz.png" alt="Torrentz" />
+      <span>Torrentz</span>
     </div>
-    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/programs/webcam/')">
-      <img src="https://topsecretclownbiz.github.io/BlackSite/assets/icons/webcam.png" alt="Webcam">
-      <div>Webcam</div>
+    <div class="icon" onclick="openWindow('webcam')">
+      <img src="../assets/icons/webcam.png" alt="Webcam" />
+      <span>Webcam</span>
     </div>
-    <!-- Recycle Bin Icon -->
-    <div class="icon" onclick="window.open('https://topsecretclownbiz.github.io/BlackSite/recycle-bin/')">
-      <img src="https://topsecretclownbiz.github.io/BlackSite/assets/icons/recycle-bin.png" alt="Recycle Bin">
-      <div>Recycle Bin</div>
+    <div class="icon" onclick="openWindow('recycle-bin')">
+      <img src="../assets/icons/recycle-bin.png" alt="Recycle Bin" />
+      <span>Recycle Bin</span>
     </div>
   </div>
 
+  <!-- Start Menu -->
   <div id="taskbar">
     <button id="start-button">START</button>
   </div>
+
   <div id="start-menu">
-    <a href="https://topsecretclownbiz.github.io/BlackSite/programs/browser/">Browser</a>
-    <a href="https://topsecretclownbiz.github.io/BlackSite/programs/chat/">Chat</a>
-    <a href="https://topsecretclownbiz.github.io/BlackSite/programs/debugger/">Debugger</a>
-    <a href="https://topsecretclownbiz.github.io/BlackSite/programs/downloads/">Downloads</a>
-    <a href="https://topsecretclownbiz.github.io/BlackSite/programs/email/">Clown Mail</a>
-    <a href="https://topsecretclownbiz.github.io/BlackSite/programs/funamp/">Funamp</a>
-    <a href="https://topsecretclownbiz.github.io/BlackSite/programs/games/">Games</a>
-    <a href="https://topsecretclownbiz.github.io/BlackSite/programs/torrentz/">Torrentz</a>
-    <a href="https://topsecretclownbiz.github.io/BlackSite/programs/webcam/">Webcam</a>
-    <a href="https://topsecretclownbiz.github.io/BlackSite/recycle-bin/">Recycle Bin</a>
+    <ul>
+      <li><a href="../programs/browser/">Browser</a></li>
+      <li><a href="../programs/chat/">Chat</a></li>
+      <li><a href="../programs/debugger/">Debugger</a></li>
+      <li><a href="../programs/downloads/">Downloads</a></li>
+      <li><a href="../programs/email/">Clown Mail</a></li>
+      <li><a href="../programs/funamp/">Funamp</a></li>
+      <li><a href="../programs/games/">Games</a></li>
+      <li><a href="../programs/torrentz/">Torrentz</a></li>
+      <li><a href="../programs/webcam/">Webcam</a></li>
+      <li><a href="../programs/recycle-bin/">Recycle Bin</a></li>
+    </ul>
   </div>
 
-  <script>
-    const startButton = document.getElementById('start-button');
-    const startMenu = document.getElementById('start-menu');
-    startButton.addEventListener('click', () => {
-      startMenu.style.display = startMenu.style.display === 'block' ? 'none' : 'flex';
-    });
-  </script>
+  <!-- Windows placeholder -->
+  <div id="window-container"></div>
+
+  <script src="../js/desktop.js"></script>
 </body>
 </html>
