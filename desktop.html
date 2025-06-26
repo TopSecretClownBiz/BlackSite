@@ -2,78 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>fundOS Desktop</title>
-  <link rel="stylesheet" href="../css/desktop.css" />
+  <link rel="stylesheet" href="css/desktop.css" />
 </head>
 <body>
-  <div id="desktop" style="background-image: url('../assets/pics/clown-wallpaper-2.png');">
-    <!-- Icons go here -->
+  <div id="desktop">
+    <!-- Desktop Icons -->
     <div class="icon" onclick="openWindow('browser')">
-      <img src="../assets/icons/browser.png" alt="Browser" />
+      <img src="assets/icons/browser.png" alt="Browser" />
       <span>Browser</span>
     </div>
     <div class="icon" onclick="openWindow('chat')">
-      <img src="../assets/icons/chat.png" alt="Chat" />
+      <img src="assets/icons/chat.png" alt="Chat" />
       <span>Chat</span>
     </div>
     <div class="icon" onclick="openWindow('debugger')">
-      <img src="../assets/icons/debugger.png" alt="Debugger" />
+      <img src="assets/icons/debugger.png" alt="Debugger" />
       <span>Debugger</span>
     </div>
     <div class="icon" onclick="openWindow('downloads')">
-      <img src="../assets/icons/downloads.png" alt="Downloads" />
+      <img src="assets/icons/downloads.png" alt="Downloads" />
       <span>Downloads</span>
     </div>
     <div class="icon" onclick="openWindow('email')">
-      <img src="../assets/icons/email.png" alt="Clown Mail" />
+      <img src="assets/icons/email.png" alt="Clown Mail" />
       <span>Clown Mail</span>
     </div>
     <div class="icon" onclick="openWindow('funamp')">
-      <img src="../assets/icons/funamp.png" alt="Funamp" />
+      <img src="assets/icons/funamp.png" alt="Funamp" />
       <span>Funamp</span>
     </div>
     <div class="icon" onclick="openWindow('games')">
-      <img src="../assets/icons/games.png" alt="Games" />
+      <img src="assets/icons/games.png" alt="Games" />
       <span>Games</span>
     </div>
     <div class="icon" onclick="openWindow('torrentz')">
-      <img src="../assets/icons/torrentz.png" alt="Torrentz" />
+      <img src="assets/icons/torrentz.png" alt="Torrentz" />
       <span>Torrentz</span>
     </div>
     <div class="icon" onclick="openWindow('webcam')">
-      <img src="../assets/icons/webcam.png" alt="Webcam" />
+      <img src="assets/icons/webcam.png" alt="Webcam" />
       <span>Webcam</span>
     </div>
     <div class="icon" onclick="openWindow('recycle-bin')">
-      <img src="../assets/icons/recycle-bin.png" alt="Recycle Bin" />
+      <img src="assets/icons/recycle-bin.png" alt="Recycle Bin" />
       <span>Recycle Bin</span>
     </div>
   </div>
 
-  <!-- Start Menu -->
+  <!-- Taskbar -->
   <div id="taskbar">
     <button id="start-button">START</button>
   </div>
 
+  <!-- Start Menu -->
   <div id="start-menu">
     <ul>
-      <li><a href="../programs/browser/">Browser</a></li>
-      <li><a href="../programs/chat/">Chat</a></li>
-      <li><a href="../programs/debugger/">Debugger</a></li>
-      <li><a href="../programs/downloads/">Downloads</a></li>
-      <li><a href="../programs/email/">Clown Mail</a></li>
-      <li><a href="../programs/funamp/">Funamp</a></li>
-      <li><a href="../programs/games/">Games</a></li>
-      <li><a href="../programs/torrentz/">Torrentz</a></li>
-      <li><a href="../programs/webcam/">Webcam</a></li>
-      <li><a href="../programs/recycle-bin/">Recycle Bin</a></li>
+      <li><a href="programs/browser/">Browser</a></li>
+      <li><a href="programs/chat/">Chat</a></li>
+      <li><a href="programs/debugger/">Debugger</a></li>
+      <li><a href="programs/downloads/">Downloads</a></li>
+      <li><a href="programs/email/">Clown Mail</a></li>
+      <li><a href="programs/funamp/">Funamp</a></li>
+      <li><a href="programs/games/">Games</a></li>
+      <li><a href="programs/torrentz/">Torrentz</a></li>
+      <li><a href="programs/webcam/">Webcam</a></li>
+      <li><a href="programs/recycle-bin/">Recycle Bin</a></li>
     </ul>
   </div>
 
-  <!-- Windows placeholder -->
+  <!-- Placeholder for windows -->
   <div id="window-container"></div>
 
-  <script src="../js/desktop.js"></script>
+  <script src="js/desktop.js"></script>
 </body>
 </html>

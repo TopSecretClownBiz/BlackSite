@@ -1,23 +1,19 @@
-document.getElementById("start-button").addEventListener("click", () => {
-  const menu = document.getElementById("start-menu");
-  menu.style.display = menu.style.display === "block" ? "none" : "block";
+document.addEventListener("DOMContentLoaded", () => {
+  const startButton = document.getElementById("start-button");
+  const startMenu = document.getElementById("start-menu");
+
+  startButton.addEventListener("click", () => {
+    startMenu.classList.toggle("open");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!startMenu.contains(e.target) && !startButton.contains(e.target)) {
+      startMenu.classList.remove("open");
+    }
+  });
 });
 
+// Fake openWindow function for placeholder (can upgrade later)
 function openWindow(appName) {
-  const container = document.getElementById("window-container");
-  const win = document.createElement("div");
-  win.classList.add("window");
-  win.innerHTML = `
-    <div class="window-header">${appName}
-      <button onclick="this.closest('.window').remove()" style="float:right;">X</button>
-    </div>
-    <div class="window-content">
-      <iframe src="../programs/${appName}/index.html" width="100%" height="100%" frameborder="0"></iframe>
-    </div>
-  `;
-  win.style.top = `${100 + Math.random() * 200}px`;
-  win.style.left = `${100 + Math.random() * 200}px`;
-  container.appendChild(win);
+  window.open(`programs/${appName}/`, '_blank');
 }
-
-// Optional: Add drag behavior (bonus!)
